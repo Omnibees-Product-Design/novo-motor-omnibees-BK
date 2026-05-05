@@ -73,32 +73,32 @@ export function Disponibilidade({ hotel }: Props) {
               <thead className="text-gray-800 text-xs font-bold uppercase">
                 <tr>
                   <th
-                    className="text-left px-3 py-3 bg-gray-100 border-b border-r border-gray-200 sticky z-10"
-                    style={{ width: '28%', top: 79 }}
+                    className="text-left px-3 py-3 bg-gray-100 sticky z-10"
+                    style={{ width: '28%', top: 'var(--chrome-bottom, 79px)', boxShadow: 'inset -1px -1px 0 #E5E7EB', transition: 'top 0.24s cubic-bezier(0.4, 0, 0.2, 1)' }}
                   >
                     Tipo de acomodação
                   </th>
                   <th
-                    className="text-left px-3 py-3 bg-gray-100 border-b border-r border-gray-200 sticky z-10"
-                    style={{ width: '11%', top: 79 }}
+                    className="text-left px-3 py-3 bg-gray-100 sticky z-10"
+                    style={{ width: '11%', top: 'var(--chrome-bottom, 79px)', boxShadow: 'inset -1px -1px 0 #E5E7EB', transition: 'top 0.24s cubic-bezier(0.4, 0, 0.2, 1)' }}
                   >
                     Capacidade
                   </th>
                   <th
-                    className="text-left px-3 py-3 bg-gray-100 border-b border-r border-gray-200 sticky z-10"
-                    style={{ width: '25%', top: 79 }}
+                    className="text-left px-3 py-3 bg-gray-100 sticky z-10"
+                    style={{ width: '25%', top: 'var(--chrome-bottom, 79px)', boxShadow: 'inset -1px -1px 0 #E5E7EB', transition: 'top 0.24s cubic-bezier(0.4, 0, 0.2, 1)' }}
                   >
                     Preço para {hotel.nights} noites
                   </th>
                   <th
-                    className="text-left px-3 py-3 bg-gray-100 border-b border-r border-gray-200 sticky z-10"
-                    style={{ width: '28%', top: 79 }}
+                    className="text-left px-3 py-3 bg-gray-100 sticky z-10"
+                    style={{ width: '28%', top: 'var(--chrome-bottom, 79px)', boxShadow: 'inset -1px -1px 0 #E5E7EB', transition: 'top 0.24s cubic-bezier(0.4, 0, 0.2, 1)' }}
                   >
                     Suas opções
                   </th>
                   <th
-                    className="text-left px-3 py-3 bg-gray-100 border-b border-gray-200 sticky z-10"
-                    style={{ width: '8%', top: 79 }}
+                    className="text-left px-3 py-3 bg-gray-100 sticky z-10"
+                    style={{ width: '8%', top: 'var(--chrome-bottom, 79px)', boxShadow: 'inset 0 -1px 0 #E5E7EB', transition: 'top 0.24s cubic-bezier(0.4, 0, 0.2, 1)' }}
                   >
                     Selecione
                   </th>
@@ -121,8 +121,17 @@ export function Disponibilidade({ hotel }: Props) {
 
           {/* Summary panel */}
           <div className="w-52 flex-shrink-0 border-l border-gray-200 flex flex-col">
-            <div className="sticky" style={{ top: 79 }}>
-              <div className="bg-gray-100 text-xs font-bold uppercase tracking-wide px-4 py-3 border-b border-gray-200 z-10">
+            <div
+              className="sticky"
+              style={{
+                top: 'var(--chrome-bottom, 79px)',
+                transition: 'top 0.24s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            >
+              <div
+                className="bg-gray-100 text-xs font-bold uppercase tracking-wide px-4 py-3 z-10"
+                style={{ boxShadow: 'inset 0 -1px 0 #E5E7EB' }}
+              >
                 <span className="opacity-0 select-none" aria-hidden="true">
                   ·
                 </span>
@@ -236,7 +245,8 @@ function RoomRows({
   onQtyChange: (rateId: string, val: number) => void
 }) {
   const span = room.rates.length
-  const topBorder = isFirst ? 'border-t border-gray-200' : 'border-t-2 border-gray-300'
+  // O thead já desenha a linha inferior via box-shadow — não duplicar com border-t na primeira linha.
+  const topBorder = isFirst ? '' : 'border-t-2 border-gray-300'
 
   return (
     <>

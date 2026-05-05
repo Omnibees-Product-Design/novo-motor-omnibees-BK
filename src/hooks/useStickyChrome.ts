@@ -20,7 +20,19 @@ export function useStickyChrome() {
     if (!header || !search) return
 
     let headerH = header.offsetHeight
-    let naturalTop = headerH + search.offsetHeight
+    let searchH = search.offsetHeight
+    let naturalTop = headerH + searchH
+
+    const root = document.documentElement
+    /**
+     * `--chrome-bottom` é o offset (em px) onde elementos sticky abaixo do
+     * chrome se devem fixar. Em compact (só search visível) = searchH;
+     * em full (header + search) = headerH + searchH.
+     */
+    const setChromeBottom = (px: number) => {
+      root.style.setProperty('--chrome-bottom', `${px}px`)
+    }
+    setChromeBottom(searchH)
 
     const EASE = 'top 0.24s cubic-bezier(0.4, 0, 0.2, 1)'
 
@@ -71,6 +83,9 @@ export function useStickyChrome() {
       const wasNormal = state === 'normal'
       state = next
 
+      // Atualiza o offset para sticky elements (table headers, etc)
+      setChromeBottom(showHeader ? headerH + searchH : searchH)
+
       if (wasNormal) {
         pin()
         header.style.top = showHeader ? '0' : `-${headerH}px`
@@ -93,6 +108,7 @@ export function useStickyChrome() {
         if (state !== 'normal') {
           state = 'normal'
           unpin()
+          setChromeBottom(searchH)
         }
       } else if (goingDown) {
         fixBoth(false)
@@ -111,14 +127,17 @@ export function useStickyChrome() {
         header.style.position = ''
         search.style.position = ''
         headerH = header.offsetHeight
-        naturalTop = headerH + search.offsetHeight
+        searchH = search.offsetHeight
+        naturalTop = headerH + searchH
         header.style.position = prevPosH
         search.style.position = prevPosS
       } else {
         headerH = header.offsetHeight
-        naturalTop = headerH + search.offsetHeight
+        searchH = search.offsetHeight
+        naturalTop = headerH + searchH
       }
       placeholder.style.height = `${naturalTop}px`
+      setChromeBottom(state === 'full' ? headerH + searchH : searchH)
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -127,6 +146,7 @@ export function useStickyChrome() {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
       placeholder.remove()
+      root.style.removeProperty('--chrome-bottom')
     }
   }, [])
 }
